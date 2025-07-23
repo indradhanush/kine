@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/k3s-io/kine/pkg/util"
@@ -61,4 +62,9 @@ func ObserveSQL(start time.Time, errCode string, sql util.Stripped, args ...inte
 			instrumentedLogger.Warnf("Slow SQL (started: %v) (total time: %v): %s", start, duration, sql)
 		}
 	}
+}
+
+func WriteDBStats(name string, stats sql.DBStats) {
+	instrumentedLogger := logrus.WithField("dbstatsName", name)
+	instrumentedLogger.Infof("DB stats: %v", stats)
 }

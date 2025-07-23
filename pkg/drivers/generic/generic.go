@@ -251,10 +251,15 @@ func Open(ctx context.Context, driverName, dataSourceName string, connPoolConfig
 }
 
 func (d *Generic) query(ctx context.Context, sql string, args ...interface{}) (result *sql.Rows, err error) {
+	preQueryStats := d.DB.Stats()
 	logrus.Tracef("QUERY %v : %s", args, util.Stripped(sql))
 	startTime := time.Now()
 	defer func() {
+		metrics.WriteDBStats("pre", preQueryStats)
 		metrics.ObserveSQL(startTime, d.ErrCode(err), util.Stripped(sql), args)
+		postQueryStats := d.DB.Stats()
+		metrics.WriteDBStats("post", postQueryStats)
+
 	}()
 	return d.DB.QueryContext(ctx, sql, args...)
 }
