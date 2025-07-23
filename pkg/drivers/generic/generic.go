@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"math/rand/v2"
 	"regexp"
 	"strconv"
 	"strings"
@@ -254,12 +255,13 @@ func (d *Generic) query(ctx context.Context, sql string, args ...interface{}) (r
 	preQueryStats := d.DB.Stats()
 	logrus.Tracef("QUERY %v : %s", args, util.Stripped(sql))
 	startTime := time.Now()
+	dbStatsID := rand.IntN(999)
+
 	defer func() {
-		metrics.WriteDBStats("pre", preQueryStats)
+		metrics.WriteDBStats(dbStatsID, "pre", preQueryStats)
 		metrics.ObserveSQL(startTime, d.ErrCode(err), util.Stripped(sql), args)
 		postQueryStats := d.DB.Stats()
-		metrics.WriteDBStats("post", postQueryStats)
-
+		metrics.WriteDBStats(dbStatsID, "post", postQueryStats)
 	}()
 	return d.DB.QueryContext(ctx, sql, args...)
 }

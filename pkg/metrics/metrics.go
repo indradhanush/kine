@@ -2,6 +2,7 @@ package metrics
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/k3s-io/kine/pkg/util"
@@ -64,7 +65,18 @@ func ObserveSQL(start time.Time, errCode string, sql util.Stripped, args ...inte
 	}
 }
 
-func WriteDBStats(name string, stats sql.DBStats) {
+func WriteDBStats(id int, name string, stats sql.DBStats) {
 	instrumentedLogger := logrus.WithField("dbstatsName", name)
-	instrumentedLogger.Infof("DB stats: %v", stats)
+	s := fmt.Sprintf("maxOpenConnections: %d, openConections: %d, inUse: %d, idle: %d, waitCount: %d, waitDuration: %s, maxIdleClosed: %d, maxIdleTimeClosed %d, maxLifetimeClosed: %d",
+		stats.MaxOpenConnections,
+		stats.OpenConnections,
+		stats.InUse,
+		stats.Idle,
+		stats.WaitCount,
+		stats.WaitDuration,
+		stats.MaxIdleClosed,
+		stats.MaxIdleTimeClosed,
+		stats.MaxLifetimeClosed,
+	)
+	instrumentedLogger.Infof("ID: %d, DB stats: %s", id, s)
 }
