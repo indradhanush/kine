@@ -154,6 +154,7 @@ func configureConnectionPooling(connPoolConfig ConnectionPoolConfig, db *sql.DB,
 	db.SetMaxIdleConns(connPoolConfig.MaxIdle)
 	db.SetMaxOpenConns(connPoolConfig.MaxOpen)
 	db.SetConnMaxLifetime(connPoolConfig.MaxLifetime)
+	db.SetConnMaxIdleTime(connPoolConfig.MaxLifetime)
 }
 
 func openAndTest(driverName, dataSourceName string) (*sql.DB, error) {
