@@ -5,7 +5,7 @@ package sqlite
 
 import (
 	"context"
-	"database/sql"
+	"github.com/k3s-io/kine/pkg/database/sql"
 	"fmt"
 	"os"
 

@@ -2,7 +2,6 @@ package generic
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"math/rand/v2"
@@ -14,12 +13,13 @@ import (
 
 	"github.com/Rican7/retry/backoff"
 	"github.com/Rican7/retry/strategy"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/sirupsen/logrus"
+
+	"github.com/k3s-io/kine/pkg/database/sql"
 	"github.com/k3s-io/kine/pkg/metrics"
 	"github.com/k3s-io/kine/pkg/server"
 	"github.com/k3s-io/kine/pkg/util"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -196,7 +196,8 @@ func Open(ctx context.Context, driverName, dataSourceName string, connPoolConfig
 	configureConnectionPooling(connPoolConfig, db, driverName)
 
 	if metricsRegisterer != nil {
-		metricsRegisterer.MustRegister(collectors.NewDBStatsCollector(db, "kine"))
+		// FIXME: Cannot use this as it wants sql.DB from stdlib.
+		// metricsRegisterer.MustRegister(collectors.NewDBStatsCollector(db, "kine"))
 	}
 
 	return &Generic{

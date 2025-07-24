@@ -2,7 +2,7 @@ package sqllog
 
 import (
 	"context"
-	"database/sql"
+	"github.com/k3s-io/kine/pkg/database/sql"
 	"math/rand/v2"
 	"strings"
 	"time"

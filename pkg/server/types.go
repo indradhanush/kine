@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"database/sql"
+	"github.com/k3s-io/kine/pkg/database/sql"
 
 	"go.etcd.io/etcd/api/v3/v3rpc/rpctypes"
 	"google.golang.org/grpc/codes"

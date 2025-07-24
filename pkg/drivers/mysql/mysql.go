@@ -3,7 +3,7 @@ package mysql
 import (
 	"context"
 	cryptotls "crypto/tls"
-	"database/sql"
+	"github.com/k3s-io/kine/pkg/database/sql"
 	"fmt"
 	"os"
 	"strconv"
